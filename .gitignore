@@ -1,0 +1,5 @@
+# dependencies
+/node_modules
+/frontend
+# local env files
+/backend/config/config.env
