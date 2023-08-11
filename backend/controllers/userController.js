@@ -25,9 +25,8 @@ exports.registerUser = asyncErrorHandler(async (req, res, next) => {
             public_id: myCloud.public_id,
             url: myCloud.secure_url,
         },
-        role: 'user'
+        role: 'admin'
     });
-    console.log(user);
     sendToken(user, 201, res);
 });
 
