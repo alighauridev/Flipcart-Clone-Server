@@ -119,7 +119,7 @@ exports.createProduct = asyncErrorHandler(async (req, res, next) => {
 
 // Update Product ---ADMIN
 exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
-
+    console.log(req.params.id);
     let product = await Product.findById(req.params.id);
 
     if (!product) {
