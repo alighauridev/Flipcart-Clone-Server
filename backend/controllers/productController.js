@@ -88,18 +88,18 @@ exports.createProduct = asyncErrorHandler(async (req, res, next) => {
         });
     }
 
-    const result = await cloudinary.v2.uploader.upload(req.body.logo, {
-        folder: "brands",
-    });
-    const brandLogo = {
-        public_id: result.public_id,
-        url: result.secure_url,
-    };
+    // const result = await cloudinary.v2.uploader.upload(req.body.logo, {
+    //     folder: "brands",
+    // });
+    // const brandLogo = {
+    //     public_id: result.public_id,
+    //     url: result.secure_url,
+    // };
 
-    req.body.brand = {
-        name: req.body.brandname,
-        logo: brandLogo
-    }
+    // req.body.brand = {
+    //     name: req.body.brandname,
+    //     logo: brandLogo
+    // }
     req.body.images = imagesLink;
 
 
@@ -157,15 +157,15 @@ exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
         const result = await cloudinary.v2.uploader.upload(req.body.logo, {
             folder: "brands",
         });
-        const brandLogo = {
-            public_id: result.public_id,
-            url: result.secure_url,
-        };
+        // const brandLogo = {
+        //     public_id: result.public_id,
+        //     url: result.secure_url,
+        // };
 
-        req.body.brand = {
-            name: req.body.brandname,
-            logo: brandLogo
-        }
+        // req.body.brand = {
+        //     name: req.body.brandname,
+        //     logo: brandLogo
+        // }
     }
 
     let specs = [];
@@ -173,7 +173,7 @@ exports.updateProduct = asyncErrorHandler(async (req, res, next) => {
         specs.push(JSON.parse(s))
     });
     req.body.specifications = specs;
-    req.body.user = req.user.id;
+    // req.body.user = req.user.id;
 
     product = await Product.findByIdAndUpdate(req.params.id, req.body, {
         new: true,
@@ -210,11 +210,11 @@ exports.deleteProduct = asyncErrorHandler(async (req, res, next) => {
 // Create OR Update Reviews
 exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
 
-    const { rating, comment, productId } = req.body;
+    const { rating, comment, productId, user, name } = req.body;
 
     const review = {
-        user: req.user._id,
-        name: req.user.name,
+        user: user,
+        name: name,
         rating: Number(rating),
         comment,
     }
@@ -225,12 +225,12 @@ exports.createProductReview = asyncErrorHandler(async (req, res, next) => {
         return next(new ErrorHandler("Product Not Found", 404));
     }
 
-    const isReviewed = product.reviews.find(review => review.user.toString() === req.user._id.toString());
+    const isReviewed = product.reviews.find(review => review.user.toString() === user.toString());
 
     if (isReviewed) {
 
         product.reviews.forEach((rev) => {
-            if (rev.user.toString() === req.user._id.toString())
+            if (rev.user.toString() === user.toString())
                 (rev.rating = rating, rev.comment = comment);
         });
     } else {
